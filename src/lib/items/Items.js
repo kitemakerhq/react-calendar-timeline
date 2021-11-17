@@ -122,6 +122,7 @@ export default class Items extends Component {
             <Item
               key={_get(item, itemIdKey)}
               item={item}
+              groups={groups}
               keys={this.props.keys}
               order={groupOrders[_get(item, itemGroupKey)]}
               dimensions={

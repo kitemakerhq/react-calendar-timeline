@@ -53,6 +53,7 @@ export default class Item extends Component {
     canSelect: PropTypes.bool,
     dimensions: PropTypes.object,
     groupTops: PropTypes.array,
+    groups: PropTypes.array,
     useResizeHandle: PropTypes.bool,
     moveResizeValidator: PropTypes.func,
     onItemDoubleClick: PropTypes.func,
@@ -639,6 +640,7 @@ export default class Item extends Component {
 
     return this.props.itemRenderer({
       item: this.props.item,
+      group: this.props.groups.find(g => g.id === this.props.item.group),
       timelineContext,
       itemContext,
       getItemProps: this.getItemProps,
