@@ -420,6 +420,7 @@ export function stackAll(itemsDimensions, groupOrders, lineHeight, stackItems) {
 export function stackGroup(itemsDimensions, isGroupStacked, lineHeight, groupTop) {
   var groupHeight = 0
   var verticalMargin = 0
+  itemsDimensions.sort((a,b) => a.dimensions.left - b.dimensions.left)
   // Find positions for each item in group
   for (let itemIndex = 0; itemIndex < itemsDimensions.length; itemIndex++) {
     let r = {}
