@@ -1,3 +1,4 @@
+import { group } from 'd3-array'
 import moment from 'moment'
 import { _get } from './generic'
 
@@ -309,7 +310,7 @@ export function groupStack(
   group,
   groupHeight,
   groupTop,
-  itemIndex
+  itemIndex,
 ) {
   // calculate non-overlapping positions
   let curHeight = groupHeight
@@ -373,7 +374,7 @@ function sum(arr = []) {
  * @param {*} lineHeight
  * @param {*} stackItems should items be stacked?
  */
-export function stackAll(itemsDimensions, groupOrders, lineHeight, stackItems) {
+export function stackAll(itemsDimensions, groupOrders, lineHeight, stackItems, visibleItems, resizingItem) {
   var groupHeights = []
   var groupTops = []
 
@@ -384,6 +385,31 @@ export function stackAll(itemsDimensions, groupOrders, lineHeight, stackItems) {
     const { items: itemsDimensions, group } = groupItems
     const groupTop = sum(groupHeights)
 
+    itemsDimensions.sort((a, b) => {
+      if (a.id === resizingItem) {
+        return -1;
+      }
+      if (b.id === resizingItem) {
+        return 1;
+      }
+      let originalGroup = visibleItems.find(i => i.id === a.id).group
+      let newGroup = itemsDimensions.find(i => i.id === a.id).dimensions.order.group.id
+      if (originalGroup > newGroup) {
+        return -1;
+      } else if (originalGroup < newGroup) {
+        return 1;
+      }
+
+      originalGroup = visibleItems.find(i => i.id === b.id).group
+      newGroup = itemsDimensions.find(i => i.id === b.id).dimensions.order.group.id
+      if (originalGroup > newGroup) {
+        return 1;
+      } else if (originalGroup < newGroup) {
+        return -1;
+      }
+      return 0;
+    })
+
     // Is group being stacked?
     const isGroupStacked =
       group.stackItems !== undefined ? group.stackItems : stackItems
@@ -391,7 +417,8 @@ export function stackAll(itemsDimensions, groupOrders, lineHeight, stackItems) {
       itemsDimensions,
       isGroupStacked,
       lineHeight,
-      groupTop
+      groupTop,
+      visibleItems
     )
     // If group height is overridden, push new height
     // Do this late as item position still needs to be calculated
@@ -417,10 +444,9 @@ export function stackAll(itemsDimensions, groupOrders, lineHeight, stackItems) {
  * @param {*} lineHeight 
  * @param {*} groupTop 
  */
-export function stackGroup(itemsDimensions, isGroupStacked, lineHeight, groupTop) {
+export function stackGroup(itemsDimensions, isGroupStacked, lineHeight, groupTop, visibleItems) {
   var groupHeight = 0
   var verticalMargin = 0
-  itemsDimensions.sort((a,b) => a.dimensions.left - b.dimensions.left)
   // Find positions for each item in group
   for (let itemIndex = 0; itemIndex < itemsDimensions.length; itemIndex++) {
     let r = {}
@@ -431,7 +457,7 @@ export function stackGroup(itemsDimensions, isGroupStacked, lineHeight, groupTop
         itemsDimensions,
         groupHeight,
         groupTop,
-        itemIndex
+        itemIndex,
       )
     } else {
       r = groupNoStack(lineHeight, itemsDimensions[itemIndex], groupHeight, groupTop)
@@ -529,7 +555,9 @@ export function stackTimelineItems(
     dimensionItems,
     groupOrders,
     lineHeight,
-    stackItems
+    stackItems,
+    visibleItems,
+    resizingItem,
   )
   return { dimensionItems, height, groupHeights, groupTops }
 }
