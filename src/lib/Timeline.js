@@ -157,7 +157,8 @@ export default class ReactCalendarTimeline extends Component {
 
     verticalLineClassNamesForTime: PropTypes.func,
 
-    children: PropTypes.node
+    children: PropTypes.node,
+    placeholder: PropTypes.func
   }
 
   static defaultProps = {
@@ -843,6 +844,7 @@ export default class ReactCalendarTimeline extends Component {
         itemResizing={this.resizingItem}
         itemResized={this.resizedItem}
         itemRenderer={this.props.itemRenderer}
+        placeholder={this.props.placeholder}
         selected={this.props.selected}
         scrollRef={this.scrollComponent}
       />

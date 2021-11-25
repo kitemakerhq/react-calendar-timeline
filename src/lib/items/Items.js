@@ -54,7 +54,9 @@ export default class Items extends Component {
     dimensionItems: PropTypes.array,
     groupTops: PropTypes.array,
     useResizeHandle: PropTypes.bool,
-    scrollRef: PropTypes.object
+    scrollRef: PropTypes.object,
+
+    placeholder: PropTypes.func
   }
 
   static defaultProps = {
@@ -163,6 +165,7 @@ export default class Items extends Component {
               onSelect={this.props.itemSelect}
               itemRenderer={this.props.itemRenderer}
               scrollRef={this.props.scrollRef}
+              placeholder={this.props.placeholder}
             />
           ))}
       </div>

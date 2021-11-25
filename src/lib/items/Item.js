@@ -1,4 +1,4 @@
-import { Component } from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import interact from 'interactjs'
 import moment from 'moment'
@@ -58,7 +58,9 @@ export default class Item extends Component {
     moveResizeValidator: PropTypes.func,
     onItemDoubleClick: PropTypes.func,
 
-    scrollRef: PropTypes.object
+    scrollRef: PropTypes.object,
+
+    placeholder: PropTypes.func
   }
 
   static defaultProps = {
@@ -77,6 +79,7 @@ export default class Item extends Component {
 
     this.state = {
       interactMounted: false,
+      clone: null,
 
       dragging: null,
       dragStart: null,
@@ -87,7 +90,8 @@ export default class Item extends Component {
       resizing: null,
       resizeEdge: null,
       resizeStart: null,
-      resizeTime: null
+      resizeTime: null,
+      placeholderPosition : null,
     }
   }
 
@@ -282,8 +286,9 @@ export default class Item extends Component {
               y: e.pageY,
             offset: this.itemTimeStart - clickTime },
             preDragPosition: { x: e.target.offsetLeft, y: e.target.offsetTop },
+            placeholderPosition: { x: e.target.offsetLeft, y: e.target.offsetTop },
             dragTime: this.itemTimeStart,
-            dragGroupDelta: 0
+            dragGroupDelta: 0,
           })
         } else {
           return false
@@ -301,10 +306,11 @@ export default class Item extends Component {
             )
           }
 
-          this.setState({
+          this.setState(prevState => ({
             dragTime: dragTime,
-            dragGroupDelta: dragGroupDelta
-          })
+            dragGroupDelta: dragGroupDelta,
+            placeholderPosition: { x: prevState.placeholderPosition.x + e.dx, y: prevState.placeholderPosition.y + e.dy },
+          }))
         }
       })
       .on('dragend', e => {
@@ -324,6 +330,7 @@ export default class Item extends Component {
             dragStart: null,
             preDragPosition: null,
             dragTime: null,
+            placeholderPosition: null,
             dragGroupDelta: null
           })
         }
@@ -638,13 +645,20 @@ export default class Item extends Component {
       width: this.props.dimensions.width
     }
 
-    return this.props.itemRenderer({
-      item: this.props.item,
-      group: this.props.groups.find(g => g.id === this.props.item.group),
-      timelineContext,
-      itemContext,
-      getItemProps: this.getItemProps,
-      getResizeProps: this.getResizeProps
-    })
+    return (
+    <>
+    {
+      this.props.itemRenderer({
+        item: this.props.item,
+        group: this.props.groups.find(g => g.id === this.props.item.group),
+        timelineContext,
+        itemContext,
+        getItemProps: this.getItemProps,
+        getResizeProps: this.getResizeProps
+      })
+    }
+    { this.state.dragging && this.props.placeholder && this.props.placeholder(this.getItemProps, this.state.placeholderPosition) }
+    </>
+    )
   }
 }
