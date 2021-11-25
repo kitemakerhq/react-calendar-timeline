@@ -79,7 +79,6 @@ export default class Item extends Component {
 
     this.state = {
       interactMounted: false,
-      clone: null,
 
       dragging: null,
       dragStart: null,
@@ -270,29 +269,25 @@ export default class Item extends Component {
           bottom: false
         },
         enabled:
-          this.props.selected && (this.canResizeLeft() || this.canResizeRight())
+          (this.canResizeLeft() || this.canResizeRight())
       })
       .draggable({
-        enabled: this.props.selected && this.canMove()
+        enabled: this.canMove()
       })
       .styleCursor(false)
       .on('dragstart', e => {
-        if (this.props.selected) {
-          const clickTime = this.timeFor(e);
-          this.setState({
-            dragging: true,
-            dragStart: {
-              x: e.pageX,
-              y: e.pageY,
-            offset: this.itemTimeStart - clickTime },
-            preDragPosition: { x: e.target.offsetLeft, y: e.target.offsetTop },
-            placeholderPosition: { x: e.target.offsetLeft, y: e.target.offsetTop },
-            dragTime: this.itemTimeStart,
-            dragGroupDelta: 0,
-          })
-        } else {
-          return false
-        }
+        const clickTime = this.timeFor(e);
+        this.setState({
+          dragging: true,
+          dragStart: {
+            x: e.pageX,
+            y: e.pageY,
+          offset: this.itemTimeStart - clickTime },
+          preDragPosition: { x: e.target.offsetLeft, y: e.target.offsetTop },
+          placeholderPosition: { x: e.target.offsetLeft, y: e.target.offsetTop },
+          dragTime: this.itemTimeStart,
+          dragGroupDelta: 0,
+        })
       })
       .on('dragmove', e => {
         if (this.state.dragging) {
@@ -336,16 +331,12 @@ export default class Item extends Component {
         }
       })
       .on('resizestart', e => {
-        if (this.props.selected) {
-          this.setState({
-            resizing: true,
-            resizeEdge: null, // we don't know yet
-            resizeStart: e.pageX,
-            resizeTime: 0
-          })
-        } else {
-          return false
-        }
+        this.setState({
+          resizing: true,
+          resizeEdge: null, // we don't know yet
+          resizeStart: e.pageX,
+          resizeTime: 0
+        })
       })
       .on('resizemove', e => {
         if (this.state.resizing) {
@@ -437,19 +428,15 @@ export default class Item extends Component {
   componentDidUpdate(prevProps) {
     this.cacheDataFromProps(this.props)
     let { interactMounted } = this.state
-    const couldDrag = prevProps.selected && this.canMove(prevProps)
-    const couldResizeLeft =
-      prevProps.selected && this.canResizeLeft(prevProps)
-    const couldResizeRight =
-      prevProps.selected && this.canResizeRight(prevProps)
-    const willBeAbleToDrag = this.props.selected && this.canMove(this.props)
-    const willBeAbleToResizeLeft =
-      this.props.selected && this.canResizeLeft(this.props)
-    const willBeAbleToResizeRight =
-      this.props.selected && this.canResizeRight(this.props)
+    const couldDrag = this.canMove(prevProps)
+    const couldResizeLeft = this.canResizeLeft(prevProps)
+    const couldResizeRight = this.canResizeRight(prevProps)
+    const willBeAbleToDrag = this.canMove(this.props)
+    const willBeAbleToResizeLeft = this.canResizeLeft(this.props)
+    const willBeAbleToResizeRight = this.canResizeRight(this.props)
 
     if(this.item) {
-      if (this.props.selected && !interactMounted) {
+      if (!interactMounted) {
         this.mountInteract()
         interactMounted = true
       }
