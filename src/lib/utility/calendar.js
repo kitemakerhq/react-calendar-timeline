@@ -1,4 +1,3 @@
-import { group } from 'd3-array'
 import moment from 'moment'
 import { _get } from './generic'
 
