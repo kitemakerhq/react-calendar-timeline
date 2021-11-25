@@ -90,7 +90,7 @@ export default class Item extends Component {
       resizeEdge: null,
       resizeStart: null,
       resizeTime: null,
-      placeholderPosition : null,
+      placeholderPosition: null
     }
   }
 
@@ -160,19 +160,29 @@ export default class Item extends Component {
     const startTime = moment(this.itemTimeStart)
 
     if (this.state.dragging) {
-      return this.dragTimeSnap(this.timeFor(e) + this.state.dragStart.offset, true)
+      return this.dragTimeSnap(
+        this.timeFor(e) + this.state.dragStart.offset,
+        true
+      )
     } else {
       return startTime
     }
   }
 
   timeFor(e) {
-    const ratio = coordinateToTimeRatio(this.props.canvasTimeStart, this.props.canvasTimeEnd, this.props.canvasWidth)
+    const ratio = coordinateToTimeRatio(
+      this.props.canvasTimeStart,
+      this.props.canvasTimeEnd,
+      this.props.canvasWidth
+    )
 
     const offset = getSumOffset(this.props.scrollRef).offsetLeft
     const scrolls = getSumScroll(this.props.scrollRef)
 
-    return (e.pageX - offset + scrolls.scrollLeft) * ratio + this.props.canvasTimeStart;
+    return (
+      (e.pageX - offset + scrolls.scrollLeft) * ratio +
+      this.props.canvasTimeStart
+    )
   }
 
   dragGroupDelta(e) {
@@ -228,7 +238,7 @@ export default class Item extends Component {
   validateDragState(e) {
     const newState = {
       dragTime: this.dragTime(e),
-      dragGroupDelta: this.dragGroupDelta(e),
+      dragGroupDelta: this.dragGroupDelta(e)
     }
 
     if (this.props.moveResizeValidator) {
@@ -257,8 +267,12 @@ export default class Item extends Component {
   }
 
   mountInteract() {
-    const leftResize = this.props.useResizeHandle ? ".rct-item-handler-resize-left" : true
-    const rightResize = this.props.useResizeHandle ? ".rct-item-handler-resize-right" : true
+    const leftResize = this.props.useResizeHandle
+      ? '.rct-item-handler-resize-left'
+      : true
+    const rightResize = this.props.useResizeHandle
+      ? '.rct-item-handler-resize-right'
+      : true
 
     interact(this.item)
       .resizable({
@@ -268,30 +282,33 @@ export default class Item extends Component {
           top: false,
           bottom: false
         },
-        enabled:
-          (this.canResizeLeft() || this.canResizeRight())
+        enabled: this.canResizeLeft() || this.canResizeRight()
       })
       .draggable({
         enabled: this.canMove()
       })
       .styleCursor(false)
       .on('dragstart', e => {
-        const clickTime = this.timeFor(e);
+        const clickTime = this.timeFor(e)
         this.setState({
           dragging: true,
           dragStart: {
             x: e.pageX,
             y: e.pageY,
-          offset: this.itemTimeStart - clickTime },
+            offset: this.itemTimeStart - clickTime
+          },
           preDragPosition: { x: e.target.offsetLeft, y: e.target.offsetTop },
-          placeholderPosition: { x: e.target.offsetLeft, y: e.target.offsetTop },
+          placeholderPosition: {
+            x: e.target.offsetLeft,
+            y: e.target.offsetTop
+          },
           dragTime: this.itemTimeStart,
-          dragGroupDelta: 0,
+          dragGroupDelta: 0
         })
       })
       .on('dragmove', e => {
         if (this.state.dragging) {
-          const { dragTime, dragGroupDelta } = this.validateDragState(e);
+          const { dragTime, dragGroupDelta } = this.validateDragState(e)
 
           if (this.props.onDrag) {
             this.props.onDrag(
@@ -304,14 +321,17 @@ export default class Item extends Component {
           this.setState(prevState => ({
             dragTime: dragTime,
             dragGroupDelta: dragGroupDelta,
-            placeholderPosition: { x: prevState.placeholderPosition.x + e.dx, y: prevState.placeholderPosition.y + e.dy },
+            placeholderPosition: {
+              x: prevState.placeholderPosition.x + e.dx,
+              y: prevState.placeholderPosition.y + e.dy
+            }
           }))
         }
       })
       .on('dragend', e => {
         if (this.state.dragging) {
           if (this.props.onDrop) {
-            const { dragTime, dragGroupDelta } = this.validateDragState(e);
+            const { dragTime, dragGroupDelta } = this.validateDragState(e)
 
             this.props.onDrop(
               this.itemId,
@@ -435,7 +455,7 @@ export default class Item extends Component {
     const willBeAbleToResizeLeft = this.canResizeLeft(this.props)
     const willBeAbleToResizeRight = this.canResizeRight(this.props)
 
-    if(this.item) {
+    if (this.item) {
       if (!interactMounted) {
         this.mountInteract()
         interactMounted = true
@@ -461,14 +481,12 @@ export default class Item extends Component {
       if (interactMounted && couldDrag !== willBeAbleToDrag) {
         interact(this.item).draggable({ enabled: willBeAbleToDrag })
       }
-    }
-    else{
-      interactMounted= false;
+    } else {
+      interactMounted = false
     }
     this.setState({
-      interactMounted,
+      interactMounted
     })
-
   }
 
   onMouseDown = e => {
@@ -546,12 +564,14 @@ export default class Item extends Component {
   }
 
   getResizeProps = (props = {}) => {
-    let leftName = "rct-item-handler rct-item-handler-left rct-item-handler-resize-left"
+    let leftName =
+      'rct-item-handler rct-item-handler-left rct-item-handler-resize-left'
     if (props.leftClassName) {
       leftName += ` ${props.leftClassName}`
     }
 
-    let rightName = "rct-item-handler rct-item-handler-right rct-item-handler-resize-right"
+    let rightName =
+      'rct-item-handler rct-item-handler-right rct-item-handler-resize-right'
     if (props.rightClassName) {
       rightName += ` ${props.rightClassName}`
     }
@@ -633,19 +653,22 @@ export default class Item extends Component {
     }
 
     return (
-    <>
-    {
-      this.props.itemRenderer({
-        item: this.props.item,
-        group: this.props.groups.find(g => g.id === this.props.item.group),
-        timelineContext,
-        itemContext,
-        getItemProps: this.getItemProps,
-        getResizeProps: this.getResizeProps
-      })
-    }
-    { this.state.dragging && this.props.placeholder && this.props.placeholder(this.getItemProps, this.state.placeholderPosition) }
-    </>
+      <>
+        {this.props.itemRenderer({
+          item: this.props.item,
+          group: this.props.groups.find(g => g.id === this.props.item.group),
+          timelineContext,
+          itemContext,
+          getItemProps: this.getItemProps,
+          getResizeProps: this.getResizeProps
+        })}
+        {this.state.dragging &&
+          this.props.placeholder &&
+          this.props.placeholder(
+            this.getItemProps,
+            this.state.placeholderPosition
+          )}
+      </>
     )
   }
 }

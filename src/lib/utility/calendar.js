@@ -309,7 +309,7 @@ export function groupStack(
   group,
   groupHeight,
   groupTop,
-  itemIndex,
+  itemIndex
 ) {
   // calculate non-overlapping positions
   let curHeight = groupHeight
@@ -339,7 +339,10 @@ export function groupStack(
         item.dimensions.top = collidingItem.dimensions.top + lineHeight
         curHeight = Math.max(
           curHeight,
-          item.dimensions.top + item.dimensions.height + verticalMargin - groupTop
+          item.dimensions.top +
+            item.dimensions.height +
+            verticalMargin -
+            groupTop
         )
       }
     } while (collidingItem)
@@ -349,7 +352,6 @@ export function groupStack(
     verticalMargin,
     itemTop: item.dimensions.top
   }
-
 }
 
 // Calculate the position of this item for a group that is not being stacked
@@ -373,7 +375,14 @@ function sum(arr = []) {
  * @param {*} lineHeight
  * @param {*} stackItems should items be stacked?
  */
-export function stackAll(itemsDimensions, groupOrders, lineHeight, stackItems, visibleItems, resizingItem) {
+export function stackAll(
+  itemsDimensions,
+  groupOrders,
+  lineHeight,
+  stackItems,
+  visibleItems,
+  resizingItem
+) {
   var groupHeights = []
   var groupTops = []
 
@@ -386,27 +395,29 @@ export function stackAll(itemsDimensions, groupOrders, lineHeight, stackItems, v
 
     itemsDimensions.sort((a, b) => {
       if (a.id === resizingItem) {
-        return -1;
+        return -1
       }
       if (b.id === resizingItem) {
-        return 1;
+        return 1
       }
       let originalGroup = visibleItems.find(i => i.id === a.id).group
-      let newGroup = itemsDimensions.find(i => i.id === a.id).dimensions.order.group.id
+      let newGroup = itemsDimensions.find(i => i.id === a.id).dimensions.order
+        .group.id
       if (originalGroup > newGroup) {
-        return -1;
+        return -1
       } else if (originalGroup < newGroup) {
-        return 1;
+        return 1
       }
 
       originalGroup = visibleItems.find(i => i.id === b.id).group
-      newGroup = itemsDimensions.find(i => i.id === b.id).dimensions.order.group.id
+      newGroup = itemsDimensions.find(i => i.id === b.id).dimensions.order.group
+        .id
       if (originalGroup > newGroup) {
-        return 1;
+        return 1
       } else if (originalGroup < newGroup) {
-        return -1;
+        return -1
       }
-      return 0;
+      return 0
     })
 
     // Is group being stacked?
@@ -428,7 +439,7 @@ export function stackAll(itemsDimensions, groupOrders, lineHeight, stackItems, v
       groupHeights.push(Math.max(groupHeight, lineHeight))
     }
   }
-  
+
   return {
     height: sum(groupHeights),
     groupHeights,
@@ -437,13 +448,19 @@ export function stackAll(itemsDimensions, groupOrders, lineHeight, stackItems, v
 }
 
 /**
- * 
- * @param {*} itemsDimensions 
- * @param {*} isGroupStacked 
- * @param {*} lineHeight 
- * @param {*} groupTop 
+ *
+ * @param {*} itemsDimensions
+ * @param {*} isGroupStacked
+ * @param {*} lineHeight
+ * @param {*} groupTop
  */
-export function stackGroup(itemsDimensions, isGroupStacked, lineHeight, groupTop, visibleItems) {
+export function stackGroup(
+  itemsDimensions,
+  isGroupStacked,
+  lineHeight,
+  groupTop,
+  visibleItems
+) {
   var groupHeight = 0
   var verticalMargin = 0
   // Find positions for each item in group
@@ -456,10 +473,15 @@ export function stackGroup(itemsDimensions, isGroupStacked, lineHeight, groupTop
         itemsDimensions,
         groupHeight,
         groupTop,
-        itemIndex,
+        itemIndex
       )
     } else {
-      r = groupNoStack(lineHeight, itemsDimensions[itemIndex], groupHeight, groupTop)
+      r = groupNoStack(
+        lineHeight,
+        itemsDimensions[itemIndex],
+        groupHeight,
+        groupTop
+      )
     }
     groupHeight = r.groupHeight
     verticalMargin = r.verticalMargin
@@ -556,7 +578,7 @@ export function stackTimelineItems(
     lineHeight,
     stackItems,
     visibleItems,
-    resizingItem,
+    resizingItem
   )
   return { dimensionItems, height, groupHeights, groupTops }
 }
