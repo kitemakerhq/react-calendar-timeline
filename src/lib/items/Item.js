@@ -101,6 +101,7 @@ export default class Item extends Component {
       nextState.dragGroupDelta !== this.state.dragGroupDelta ||
       nextState.resizing !== this.state.resizing ||
       nextState.resizeTime !== this.state.resizeTime ||
+      nextState.placeholderPosition !== this.state.placeholderPosition ||
       nextProps.keys !== this.props.keys ||
       !deepObjectCompare(nextProps.itemProps, this.props.itemProps) ||
       nextProps.selected !== this.props.selected ||
@@ -116,6 +117,7 @@ export default class Item extends Component {
       nextProps.canSelect !== this.props.canSelect ||
       nextProps.canMove !== this.props.canMove ||
       nextProps.canResizeLeft !== this.props.canResizeLeft ||
+      nextProps.canResizeRight !== this.props.canResizeRight ||
       nextProps.canResizeRight !== this.props.canResizeRight ||
       nextProps.dimensions !== this.props.dimensions
     return shouldUpdate
@@ -346,7 +348,8 @@ export default class Item extends Component {
             preDragPosition: null,
             dragTime: null,
             placeholderPosition: null,
-            dragGroupDelta: null
+            dragGroupDelta: null,
+            interactMounted: false
           })
         }
       })
