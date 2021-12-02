@@ -158,7 +158,7 @@ export default class ReactCalendarTimeline extends Component {
     verticalLineClassNamesForTime: PropTypes.func,
 
     children: PropTypes.node,
-    placeholder: PropTypes.func
+    placeholder: PropTypes.bool
   }
 
   static defaultProps = {

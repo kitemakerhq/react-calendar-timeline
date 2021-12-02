@@ -60,7 +60,7 @@ export default class Item extends Component {
 
     scrollRef: PropTypes.object,
 
-    placeholder: PropTypes.func
+    placeholder: PropTypes.bool
   }
 
   static defaultProps = {
@@ -592,6 +592,48 @@ export default class Item extends Component {
     }
   }
 
+  getPlaceholderStyle = () => {
+    const dimensions = this.props.dimensions
+    return {
+      position: 'absolute',
+      boxSizing: 'border-box',
+      left: `${this.state.placeholderPosition.x}px`,
+      top: `${this.state.placeholderPosition.y}px`,
+      width: `${dimensions.width}px`,
+      height: `${dimensions.height}px`,
+      zIndex: '100',
+      lineHeight: `${dimensions.height}px`,
+      transition: 'none'
+    }
+  }
+
+  getPlaceholderProps = () => {
+    //TODO: maybe shouldnt include all of these classes
+    const classNames =
+      'rct-item' +
+      (this.props.item.className ? ` ${this.props.item.className}` : '')
+
+    return {
+      key: `${this.itemId}-clone`,
+      title: this.itemDivTitle,
+      className: classNames,
+      style: Object.assign({}, this.getPlaceholderStyle())
+    }
+  }
+
+  placeholder = ({ item, itemContext, timelineContext }) => {
+    const placeholderContext = { ...itemContext, dragging: false }
+
+    return this.props.itemRenderer({
+      item: this.props.item,
+      group: this.props.groups.find(g => g.id === this.props.item.group),
+      timelineContext,
+      itemContext: placeholderContext,
+      getItemProps: this.getPlaceholderProps,
+      getResizeProps: this.getResizeProps
+    })
+  }
+
   getItemStyle(props) {
     const dimensions = this.props.dimensions
 
@@ -667,10 +709,12 @@ export default class Item extends Component {
         })}
         {this.state.dragging &&
           this.props.placeholder &&
-          this.props.placeholder(
-            this.getItemProps,
-            this.state.placeholderPosition
-          )}
+          this.placeholder({
+            item: this.props.item,
+            group: this.props.groups.find(g => g.id === this.props.item.group),
+            timelineContext,
+            itemContext
+          })}
       </>
     )
   }

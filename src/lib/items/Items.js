@@ -56,7 +56,7 @@ export default class Items extends Component {
     useResizeHandle: PropTypes.bool,
     scrollRef: PropTypes.object,
 
-    placeholder: PropTypes.func
+    placeholder: PropTypes.bool
   }
 
   static defaultProps = {
