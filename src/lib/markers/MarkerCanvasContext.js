@@ -4,7 +4,8 @@ import createReactContext from 'create-react-context'
 const defaultContextState = {
   subscribeToMouseOver: () => {
     console.warn('"subscribeToMouseOver" default func is being used')
-  }
+  },
+  canvasDragging: false
 }
 /* eslint-enable */
 

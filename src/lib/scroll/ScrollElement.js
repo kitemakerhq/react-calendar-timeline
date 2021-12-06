@@ -201,7 +201,9 @@ class ScrollElement extends Component {
         onTouchEnd={this.handleTouchEnd}
         onScroll={this.handleScroll}
       >
-        {children}
+        {React.cloneElement(children, {
+          canvasIsDragging: isDragging && !this.props.isInteractingWithItem
+        })}
       </div>
     )
   }
