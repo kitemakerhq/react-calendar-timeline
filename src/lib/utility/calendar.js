@@ -394,10 +394,10 @@ export function stackAll(
     const groupTop = sum(groupHeights)
 
     itemsDimensions.sort((a, b) => {
-      if (a.id === resizingItem) {
+      if (a.id === resizingItem || b.open) {
         return -1
       }
-      if (b.id === resizingItem) {
+      if (b.id === resizingItem || a.open) {
         return 1
       }
       let originalGroup = visibleItems.find(i => i.id === a.id).group
@@ -628,7 +628,8 @@ export function getItemDimensions({
     dimension.height = lineHeight * itemHeightRatio
     return {
       id: itemId,
-      dimensions: dimension
+      dimensions: dimension,
+      ...item
     }
   }
 }
