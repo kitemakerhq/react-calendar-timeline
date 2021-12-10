@@ -1,37 +1,32 @@
 import PropTypes from 'prop-types'
 import React, { Component } from 'react'
-import moment from 'moment'
-
+import windowResizeDetector from '../resize-detector/window'
+import Columns from './columns/Columns'
+import {
+  defaultHeaderLabelFormats,
+  defaultKeys,
+  defaultSubHeaderLabelFormats,
+  defaultTimeSteps
+} from './default-config'
+import DateHeader from './headers/DateHeader'
+import { TimelineHeadersProvider } from './headers/HeadersContext'
+import TimelineHeaders from './headers/TimelineHeaders'
 import Items from './items/Items'
 import Sidebar from './layout/Sidebar'
-import Columns from './columns/Columns'
+import MarkerCanvas from './markers/MarkerCanvas'
+import { TimelineMarkersProvider } from './markers/TimelineMarkersContext'
 import GroupRows from './row/GroupRows'
 import ScrollElement from './scroll/ScrollElement'
-import MarkerCanvas from './markers/MarkerCanvas'
-import windowResizeDetector from '../resize-detector/window'
-
+import { TimelineStateProvider } from './timeline/TimelineStateContext'
 import {
-  getMinUnit,
-  getNextUnit,
-  calculateTimeForXPosition,
   calculateScrollCanvas,
+  calculateTimeForXPosition,
   getCanvasBoundariesFromVisibleTime,
   getCanvasWidth,
+  getMinUnit,
   stackTimelineItems
 } from './utility/calendar'
 import { _get, _length } from './utility/generic'
-import {
-  defaultKeys,
-  defaultTimeSteps,
-  defaultHeaderLabelFormats,
-  defaultSubHeaderLabelFormats
-} from './default-config'
-import { TimelineStateProvider } from './timeline/TimelineStateContext'
-import { TimelineMarkersProvider } from './markers/TimelineMarkersContext'
-import { TimelineHeadersProvider } from './headers/HeadersContext'
-import TimelineHeaders from './headers/TimelineHeaders'
-import DateHeader from './headers/DateHeader'
-import SidebarHeader from './headers/SidebarHeader'
 
 export default class ReactCalendarTimeline extends Component {
   static propTypes = {
