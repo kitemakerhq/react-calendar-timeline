@@ -74,6 +74,7 @@ export default class ReactCalendarTimeline extends Component {
     onItemContextMenu: PropTypes.func,
     onCanvasDoubleClick: PropTypes.func,
     onCanvasContextMenu: PropTypes.func,
+    onItemStartInteraction: PropTypes.func,
     onZoom: PropTypes.func,
     onItemDrag: PropTypes.func,
 
@@ -828,6 +829,7 @@ export default class ReactCalendarTimeline extends Component {
         itemSelect={this.selectItem}
         itemDrag={this.dragItem}
         itemDrop={this.dropItem}
+        itemStartInteraction={this.props.onItemStartInteraction}
         onItemDoubleClick={this.doubleClickItem}
         onItemContextMenu={
           this.props.onItemContextMenu ? this.contextMenuClickItem : undefined

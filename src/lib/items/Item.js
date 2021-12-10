@@ -47,6 +47,7 @@ export default class Item extends Component {
     onResizing: PropTypes.func,
     onResized: PropTypes.func,
     onContextMenu: PropTypes.func,
+    onStartInteraction: PropTypes.func,
     itemRenderer: PropTypes.func,
 
     itemProps: PropTypes.object,
@@ -292,6 +293,9 @@ export default class Item extends Component {
       .styleCursor(false)
       .on('dragstart', e => {
         const clickTime = this.timeFor(e)
+        if (this.props.onStartInteraction) {
+          this.props.onStartInteraction(this.props.item)
+        }
         this.setState({
           dragging: true,
           dragStart: {
@@ -354,6 +358,9 @@ export default class Item extends Component {
         }
       })
       .on('resizestart', e => {
+        if (this.props.onStartInteraction) {
+          this.props.onStartInteraction(this.props.item)
+        }
         this.setState({
           resizing: true,
           resizeEdge: null, // we don't know yet

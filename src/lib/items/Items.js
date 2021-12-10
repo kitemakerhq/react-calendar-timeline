@@ -44,6 +44,7 @@ export default class Items extends Component {
     itemDrop: PropTypes.func,
     itemResizing: PropTypes.func,
     itemResized: PropTypes.func,
+    itemStartInteraction: PropTypes.func,
 
     onItemDoubleClick: PropTypes.func,
     onItemContextMenu: PropTypes.func,
@@ -160,6 +161,7 @@ export default class Items extends Component {
               moveResizeValidator={this.props.moveResizeValidator}
               onDrag={this.props.itemDrag}
               onDrop={this.props.itemDrop}
+              onStartInteraction={this.props.itemStartInteraction}
               onItemDoubleClick={this.props.onItemDoubleClick}
               onContextMenu={this.props.onItemContextMenu}
               onSelect={this.props.itemSelect}
