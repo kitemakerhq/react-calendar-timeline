@@ -608,9 +608,9 @@ export default class Item extends Component {
       top: `${this.state.placeholderPosition.y}px`,
       width: `${dimensions.width}px`,
       height: `${dimensions.height}px`,
-      zIndex: '7!important',
       lineHeight: `${dimensions.height}px`,
-      transition: 'none'
+      transition: 'none',
+      zIndex: '10',
     }
   }
 
