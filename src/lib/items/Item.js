@@ -152,8 +152,8 @@ export default class Item extends Component {
   resizeTimeSnap(dragTime) {
     const { dragSnap } = this.props
     if (dragSnap) {
-      const endTime = this.itemTimeEnd % dragSnap
-      return Math.round((dragTime - endTime) / dragSnap) * dragSnap + endTime
+      const offset = moment().utcOffset() * 60 * 1000
+      return Math.round(dragTime / dragSnap) * dragSnap - offset % dragSnap
     } else {
       return dragTime
     }
@@ -610,7 +610,7 @@ export default class Item extends Component {
       height: `${dimensions.height}px`,
       lineHeight: `${dimensions.height}px`,
       transition: 'none',
-      zIndex: '10',
+      zIndex: '10'
     }
   }
 
